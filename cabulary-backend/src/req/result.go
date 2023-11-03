@@ -13,7 +13,7 @@ type Result struct {
 }
 
 func (result Result) ToJSON() []byte {
-	resStr := "{code:" + strconv.Itoa(int(result.code)) + ",msg:\"" + result.msg + "\",data:"
+	resStr := "{\"code\":" + strconv.Itoa(int(result.code)) + ",\"msg\":\"" + result.msg + "\",\"data\":"
 	if result.data == nil || len(result.data) == 0 {
 		resStr += "\"\"}"
 	} else {

@@ -1,28 +1,46 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"net"
 	"net/http"
 	"talkit-backend/src/req"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jmoiron/sqlx"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func main() {
-	db, err := sqlx.Open("mysql", "hoshi:123456@tcp(127.0.0.1:3306)/talkit")
-	defer func() {
-		err = db.Close()
-		if err != nil {
-			fmt.Println("db close error ", err)
-		}
-	}()
+	// 设置客户端连接配置
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+
+	// 连接到MongoDB
+	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
-		fmt.Println("connect mysql error ", err)
+		log.Fatal(err)
 	}
 
-	httpHandler := req.NewHttpHandler(db)
+	// 检查连接
+	err = client.Ping(context.TODO(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Connected to MongoDB!")
+	// db, err := sqlx.Open("mysql", "hoshi:123456@tcp(127.0.0.1:3306)/talkit")
+	// defer func() {
+	// 	err = db.Close()
+	// 	if err != nil {
+	// 		fmt.Println("db close error ", err)
+	// 	}
+	// }()
+	// if err != nil {
+	// 	fmt.Println("connect mysql error ", err)
+	// }
+
+	httpHandler := req.NewHttpHandler(client)
 	httpHandler.Mount()
 	go func() {
 		fmt.Println("Server start, port 3000")

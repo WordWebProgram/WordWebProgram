@@ -1,6 +1,6 @@
 // 基于HTML5 indexDB的本地数据库
 // 在云端数据库上线后可作为本地与云端之间的缓存，减少服务器更新压力，因此取名cache.js
-
+import axios from 'axios'
 var db
 
 const config = {
@@ -42,7 +42,7 @@ const connect = () => {
     if (!db.objectStoreNames.contains('user')) {
       let objectStore = db.createObjectStore('user', {
         keyPath: '_id',
-        autoIncrement: true
+        autoIncrement: false
       })
 
       objectStore.createIndex('username', 'username', { unique: true })
@@ -69,7 +69,7 @@ const connect = () => {
     if (!db.objectStoreNames.contains('learned')) {
       let objectStore = db.createObjectStore('learned', {
         keyPath: '_id',
-        autoIncrement: true
+        autoIncrement: false
       })
 
       objectStore.createIndex('user', 'user', { unique: true })
@@ -94,7 +94,7 @@ const connect = () => {
     if (!db.objectStoreNames.contains('progress')) {
       let objectStore = db.createObjectStore('progress', {
         keyPath: '_id',
-        autoIncrement: true
+        autoIncrement: false
       })
 
       objectStore.createIndex('user', 'user', { unique: true })
@@ -158,40 +158,82 @@ const getUserByName = (username) => {
     request.onerror = (e) => { reject(e.target.error) }
   })
 }
+// 用户注册
+const userRegister = (username, password) => {
+  return new Promise((resolve, reject) => {
 
+  })
+}
 // 用户登录，如果username未被注册则注册新用户
 const userLogin = (username, password) => {
   return new Promise((resolve, reject) => {
     if (!db) return reject(new Error('db not connected'))
-
     let transaction = db.transaction('user', 'readwrite')
 
     let store = transaction.objectStore('user')
 
     let request = store.index('username').get(username.toLowerCase())
 
-    request.onsuccess = (e) => {
+    request.onsuccess = async (e) => {
       let user = e.target.result
       if (user) {
         // username registered
         if (password === user.password) resolve(e.target.result)
         else return reject(new Error('password'))
       } else {
+        let res = await axios.get('/api/login', {
+          params: {
+            name: username,
+            pswd: password
+          }
+        }).then(res => {
+          // let jsondata = JSON.parse(res.data)
+          // console.log(jsondata.code)
+          console.log('111', res.data)
+          return res
+        })
+        console.log('12', res.data)
+        // let JSONresult = JSON.parse(res.data)
+        // console.log(JSONresult)
+        // let jsondata = JSON.parse(res.data)
+        // console.log(jsondata.code)
+        let code = res.data.code
+        let data = res.data.data
+        // data.replace(/'/g, '"')
+        // let responseData = JSON.parse(data.code)
+        // 访问属性
+        // console.log(responseData)
+        if (code === 1) {
+          console.log(res)
+          alert('用户不存在或密码错误')
+        } else if (code === 0) {
+          user = {
+            username,
+            password,
+            createdAt: Date.now()
+          }
+          let addRequest = store.add(user)
+          addRequest.onsuccess = (e) => {
+            console.log('new user created')
+            resolve({ _id: data.id, ...user })
+          }
+          addRequest.onerror = (e) => { reject(e.target.error) }
+        }
+
+        //   console.log(response)
+        // })
         // username not exist, create new user
-        user = {
-          username,
-          password,
-          createdAt: Date.now()
-        }
-
-        let addRequest = store.add(user)
-
-        addRequest.onsuccess = (e) => {
-          console.log('new user created')
-          resolve({ _id: e.target.result, ...user })
-        }
-
-        addRequest.onerror = (e) => { reject(e.target.error) }
+        //     user = {
+        //       username,
+        //       password,
+        //       createdAt: Date.now()
+        //     }
+        //     let addRequest = store.add(user)
+        //     addRequest.onsuccess = (e) => {
+        //       console.log('new user created')
+        //       resolve({ _id: e.target.result, ...user })
+        //     }
+        //     addRequest.onerror = (e) => { reject(e.target.error) }
       }
     }
 
@@ -496,7 +538,8 @@ const cache = {
   getUserListProgress,
   isUserLearnedWord,
   editUserLearned,
-  editUserProgress
+  editUserProgress,
+  userRegister
 }
 
 export default cache
