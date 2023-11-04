@@ -2,6 +2,7 @@ package req
 
 import (
 	"crypto/md5"
+	"encoding/json"
 	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"io"
@@ -95,6 +96,34 @@ func (handler HttpHandler) Mount() {
 		if err != nil {
 			fmt.Println("http /register write error ", err)
 		}
+	})
+	http.HandleFunc("/findList", func(writer http.ResponseWriter, req *http.Request) {
+		params := req.URL.Query()
+		userId := params.Get("userid")
+		result, err := mongodb.FindList(handler.db, userId)
+		if err != nil {
+			writer.Write(Failed(1, "无数据"))
+			fmt.Println(err)
+		} else {
+			_, err = writer.Write(Success(result))
+		}
+
+	})
+	http.HandleFunc("/updateList", func(writer http.ResponseWriter, request *http.Request) {
+		decoder := json.NewDecoder(request.Body)
+		// 用于存放参数key=value数据
+		var params map[string]string
+		// 解析参数 存入map
+		decoder.Decode(&params)
+		fmt.Printf("POST json: userid=%s, password=%s\n", params["userid"], params["progress"])
+
+		progress := mongodb.OldResult{}
+		err := json.Unmarshal([]byte(params["progress"]), &progress)
+		if err != nil {
+			fmt.Printf("解析json字符串异常：%s\n", err)
+		}
+		_, err = mongodb.UpdateList(handler.db, params["userid"], progress)
+
 	})
 	//http.HandleFunc("/friend/get", func(writer http.ResponseWriter, req *http.Request) {
 	//	params := req.URL.Query()
