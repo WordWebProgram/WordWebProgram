@@ -42,7 +42,7 @@ const connect = () => {
     if (!db.objectStoreNames.contains('user')) {
       let objectStore = db.createObjectStore('user', {
         keyPath: '_id',
-        autoIncrement: false
+        autoIncrement: true
       })
 
       objectStore.createIndex('username', 'username', { unique: true })
@@ -69,7 +69,7 @@ const connect = () => {
     if (!db.objectStoreNames.contains('learned')) {
       let objectStore = db.createObjectStore('learned', {
         keyPath: '_id',
-        autoIncrement: false
+        autoIncrement: true
       })
 
       objectStore.createIndex('user', 'user', { unique: true })
@@ -93,8 +93,7 @@ const connect = () => {
 
     if (!db.objectStoreNames.contains('progress')) {
       let objectStore = db.createObjectStore('progress', {
-        keyPath: '_id',
-        autoIncrement: false
+        keyPath: '_id'
       })
 
       objectStore.createIndex('user', 'user', { unique: true })
@@ -208,11 +207,31 @@ const userLogin = (username, password) => {
           alert('用户不存在或密码错误')
         } else if (code === 0) {
           user = {
+            _id: data.id,
             username,
             password,
             createdAt: Date.now()
           }
-          let addRequest = store.add(user)
+          let res = await axios.get('/api/findList', {
+            params: {
+              userid: data.id
+            }
+          }).then(res => {
+            // let jsondata = JSON.parse(res.data)
+            // console.log(jsondata.code)
+            console.log('111', res.data)
+            return res
+          })
+          if (res.data.code === 0) {
+            let transaction = db.transaction('progress', 'readwrite')
+
+            let store = transaction.objectStore('progress')
+            store.add(res.data.data)
+            // let request = store.index('user').get(data.id)
+          }
+          let transaction1 = db.transaction('user', 'readwrite')
+          let store1 = transaction1.objectStore('user')
+          let addRequest = store1.add(user)
           addRequest.onsuccess = (e) => {
             console.log('new user created')
             resolve({ _id: data.id, ...user })
@@ -454,8 +473,9 @@ const editUserProgress = (userId, listName, { location = 0, change = 0 }) => {
 
     let request = store.index('user').get(userId)
 
-    request.onsuccess = (e) => {
+    request.onsuccess = async (e) => {
       // 注意这里返回的是progress表里的lists字段，方便应用
+      console.log('progress', e)
       let progress = e.target.result
       let findFlag = false
       if (progress) {
@@ -487,8 +507,22 @@ const editUserProgress = (userId, listName, { location = 0, change = 0 }) => {
             }
           }
         }
-        let putRequest = store.put(progress)
+        let transaction = db.transaction('progress', 'readwrite')
 
+        let store = transaction.objectStore('progress')
+        let putRequest = store.put(progress)
+        let res = await axios.post('/api/updateList', {
+          userid: userId,
+          progress: JSON.stringify(progress)
+        }).then(res => {
+          // let jsondata = JSON.parse(res.data)
+          // console.log(jsondata.code)
+          console.log('111', res.data)
+          return res
+        })
+        if (res.code === 0) {
+
+        }
         putRequest.onsuccess = (e) => {
           if (findFlag) {
             console.log('list progress edited')
@@ -512,6 +546,9 @@ const editUserProgress = (userId, listName, { location = 0, change = 0 }) => {
             }
           }
         }
+        let transaction = db.transaction('progress', 'readwrite')
+
+        let store = transaction.objectStore('progress')
         let addRequest = store.add(progress)
 
         addRequest.onsuccess = (e) => {
