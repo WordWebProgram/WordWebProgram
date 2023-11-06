@@ -1,38 +1,47 @@
 <template>
-    <div class="background">
-        <div class="login">
-            <div class="login-title">
-                <span>登录/注册</span>
-                <img @click="close" src="../static/icons/close.png" />
-            </div>
-            <div class="login-main">
-                <input v-model="username" placeholder="请输入用户名" spellcheck="false" type="text" />
-                <div class="login-line" />
-                <span>用户名</span>
-                <input v-model="password" placeholder="请输入密码" type="password" />
-                <div class="login-line" />
-                <span>密码</span>
-                <div class="login-button" @click="login">登录</div>
-                <div class="login-hint">未注册用户将会自动注册为新用户</div>
-            </div>
-        </div>
+  <div class="background">
+    <div class="login">
+      <div class="login-title">
+        <span @="chageType(1)">登录/</span><span @="chageType(2)">注册</span>
+        <img @click="close" src="../static/icons/close.png" />
+      </div>
+      <div class="login-main">
+        <input v-model="username" placeholder="请输入用户名" spellcheck="false" type="text" />
+        <div class="login-line" />
+        <span>用户名</span>
+        <input v-model="password" placeholder="请输入密码" type="password" />
+        <div class="login-line" />
+        <span>密码</span>
+        <div v-if="type == 'login'" class="login-button" @click="login">登录</div>
+        <div v-else class="login-button" @click="register">注册</div>
+        <div class="login-hint">未注册用户将会自动注册为新用户</div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'Login',
-  data () {
+  data() {
     return {
       username: '',
-      password: ''
+      password: '',
+      type: 'login'
     }
   },
   methods: {
-    close () {
+    changeType(flag) {
+      if (flag === 1) {
+        this.type = 'login'
+      } else {
+        this.type = 'register'
+      }
+    },
+    close() {
       this.$emit('close')
     },
-    login () {
+    login() {
       const username = this.username
       const password = this.password
       if (!username) return alert('请填写用户名')
@@ -41,6 +50,24 @@ export default {
       if (password.length < 5) return alert('密码至少需要5位')
       // if user exist
       this.$cache.userLogin(username, password)
+        .then((user) => {
+          this.$store.commit('setUser', user)
+          this.close()
+        })
+        .catch((err) => {
+          if (err.message === 'password') return alert('密码错误，请重试')
+          else console.log(err)
+        })
+    },
+    register() {
+      const username = this.username
+      const password = this.password
+      if (!username) return alert('请填写用户名')
+      if (!password) return alert('请填写密码')
+      if (username.length < 4) return alert('用户名至少需要4位')
+      if (password.length < 5) return alert('密码至少需要5位')
+      // if user exist
+      this.$cache.userRegister(username, password)
         .then((user) => {
           this.$store.commit('setUser', user)
           this.close()
@@ -114,7 +141,7 @@ export default {
   font-size: 18px;
 }
 
-.login-main input::-webkit-input-placeholder{
+.login-main input::-webkit-input-placeholder {
   color: #C1CACE;
 }
 

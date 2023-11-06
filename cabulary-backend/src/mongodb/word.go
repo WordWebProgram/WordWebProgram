@@ -9,8 +9,8 @@ import (
 )
 
 type Progress struct {
-	User  string `json:"user"`
-	lists interface{}
+	User  string      `json:"user"`
+	Lists interface{} `json:"lists"`
 }
 type List struct {
 	location  int
@@ -24,14 +24,14 @@ type OldResult struct {
 }
 
 func FindList(db *mongo.Client, userId string) (*Progress, error) {
-	filter := bson.D{{"userid", userId}}
+	filter := bson.D{{"User", userId}}
 	// 指定获取要操作的数据集
 	collection := db.Database("neet-words").Collection("lists")
 	var result Progress
 	err := collection.FindOne(context.TODO(), filter).Decode(&result)
 	if err != nil {
 		result := Progress{
-			User: userId, lists: nil,
+			User: userId, Lists: nil,
 		}
 		_, err := collection.InsertOne(context.TODO(), result)
 		if err != nil {
