@@ -159,8 +159,30 @@ const getUserByName = (username) => {
 }
 // 用户注册
 const userRegister = (username, password) => {
-  return new Promise((resolve, reject) => {
-
+  return new Promise(async (resolve, reject) => {
+    let res = await axios.get('/api/register', {
+      params: {
+        name: username,
+        pswd: password
+      }
+    }).then(res => {
+      // let jsondata = JSON.parse(res.data)
+      // console.log(jsondata.code)
+      console.log('111', res.data)
+      return res
+    })
+    let code = res.data.code
+    // data.replace(/'/g, '"')
+    // let responseData = JSON.parse(data.code)
+    // 访问属性
+    // console.log(responseData)
+    if (code === 1) {
+      console.log(res)
+      alert('用户不存在或密码错误')
+    } else if (code === 0) {
+      alert('注册成功')
+    }
+    resolve()
   })
 }
 // 用户登录，如果username未被注册则注册新用户
@@ -212,7 +234,7 @@ const userLogin = (username, password) => {
             password,
             createdAt: Date.now()
           }
-          let res = await axios.get('/api/findList', {
+          let res1 = await axios.get('/api/findList', {
             params: {
               userid: data.id
             }
@@ -222,11 +244,17 @@ const userLogin = (username, password) => {
             console.log('111', res.data)
             return res
           })
-          if (res.data.code === 0) {
+          if (res1.data.code === 0) {
+            let progress = {
+              user: res1.data.data.user,
+              lists: {
+                ...res1.data.data.lists
+              }
+            }
             let transaction = db.transaction('progress', 'readwrite')
 
             let store = transaction.objectStore('progress')
-            store.add(res.data.data)
+            store.add(progress)
             // let request = store.index('user').get(data.id)
           }
           let transaction1 = db.transaction('user', 'readwrite')
