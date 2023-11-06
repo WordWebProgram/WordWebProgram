@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"time"
 )
 
 type User struct {
@@ -30,7 +31,7 @@ func FetchUserInfoByName(db *mongo.Client, username string) (*User, error) {
 func InsertUser(db *mongo.Client, username string, password string) error {
 	collection := db.Database("neet-words").Collection("user")
 	result := User{
-		Username: username, Password: password, CreatedAt: "111",
+		Username: username, Password: password, CreatedAt: time.Now().String(),
 	}
 	insertResult, err := collection.InsertOne(context.TODO(), result)
 	if err != nil {
