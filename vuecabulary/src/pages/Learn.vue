@@ -55,7 +55,7 @@
               class="button yellow"
               @click="reviseCurrentWord(2)"
               :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'">
-              模糊
+              记忆模糊
             </div>
             <div
               class="button red"
