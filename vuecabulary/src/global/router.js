@@ -10,7 +10,10 @@ const routes = [
   {
     path: '/',
     name: 'index',
-    redirect: '/home'
+    redirect: '/home',
+    meta: {
+      title: '成为单词高手'
+    }
   },
   {
     path: '*',

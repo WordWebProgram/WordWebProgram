@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="main">
-      <div class="title" @click="goHome">高效背单词</div>
+      <div class="title" @click="goHome">单词高手</div>
       <div class="user" @click="showMenu=!showMenu">
         <template v-if="user._id">
           <div>{{user.username}}</div>

@@ -2,7 +2,7 @@
   <div class="background">
     <div class="login">
       <div class="login-title">
-        <span @="chageType(1)">登录/</span><span @="chageType(2)">注册</span>
+        <span >登录/注册</span>
         <img @click="close" src="../static/icons/close.png" />
       </div>
       <div class="login-main">
@@ -12,8 +12,7 @@
         <input v-model="password" placeholder="请输入密码" type="password" />
         <div class="login-line" />
         <span>密码</span>
-        <div v-if="type == 'login'" class="login-button" @click="login">登录</div>
-        <div v-else class="login-button" @click="register">注册</div>
+        <div  class="login-button" @click="login">登录</div>
         <div class="login-hint">未注册用户将会自动注册为新用户</div>
       </div>
     </div>
@@ -102,7 +101,7 @@ export default {
 
 .login-title {
   width: 100%;
-  background: #40BC96;
+  background: #BD3124;
   height: 100px;
   display: flex;
   align-items: center;
@@ -165,7 +164,7 @@ export default {
 .login-button {
   width: 100%;
   height: 70px;
-  background: #3CCFCF;
+  background: #BD3124;
   color: #FFFFFF;
   display: flex;
   align-items: center;
