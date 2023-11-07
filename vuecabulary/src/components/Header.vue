@@ -165,7 +165,7 @@ export default {
   right: 3px;
   top: -7px;
   transform: rotate(45deg);
-  height: 14px;
+  height: 15px;
   width: 15px;
   z-index: 10;
 }
