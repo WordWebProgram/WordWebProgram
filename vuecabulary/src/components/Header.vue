@@ -1,23 +1,23 @@
 <template>
-    <div class="header">
-        <div class="main">
-            <div class="title" @click="goHome">高效背单词</div>
-            <div class="user" @click="showMenu=!showMenu">
-                <template v-if="user._id">
-                    <div>{{user.username}}</div>
-                    <span>{{user.username}}</span>
-                </template>
-                <template v-else>
-                    <div></div>
-                    <span>未登录</span>
-                </template>
-                <img src="../static/icons/down.png" />
-            </div>
-            <div class="menu" v-if="showMenu">
-                <div class="menu-item" @click="userAction">{{user._id?'退出登录':'登录'}}</div>
-            </div>
-        </div>
+  <div class="header">
+    <div class="main">
+      <div class="title" @click="goHome">高效背单词</div>
+      <div class="user" @click="showMenu=!showMenu">
+        <template v-if="user._id">
+          <div>{{user.username}}</div>
+          <span>{{user.username}}</span>
+        </template>
+        <template v-else>
+          <div></div>
+          <span>未登录</span>
+        </template>
+        <img src="../static/icons/down.png" />
+      </div>
+      <div class="menu" v-if="showMenu">
+        <div class="menu-item" @click="userAction">{{user._id?'退出登录':'登录'}}</div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -58,7 +58,7 @@ export default {
   position: absolute;
   top: 0;
   width: 100%;
-  background: #346a9a;
+  background: #FCC200;
   height: 80px;
   z-index: 1;
 }

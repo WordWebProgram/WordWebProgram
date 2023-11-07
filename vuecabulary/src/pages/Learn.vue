@@ -1,87 +1,90 @@
 <template>
-    <div class="learn">
-        <div class="main">
-            <div class="main-left">
-                <div class="left-back" @click="goBack">
-                    <img src="../static/icons/back.png" />
-                    后退
-                </div>
-                <div class="left-main">
-                    <div class="left-title">
-                        <img src="../static/icons/memory.png" />
-                        学习模式
-                    </div>
-                    <div class="left-counter">
-                        <div class="left-number" style="color:#AAAAAA">{{wordLeft}}</div>
-                        <span>剩余</span>
-                        <img src="../static/icons/next.png" />
-                        <div class="left-number" style="color:#EACD76">{{wordReview}}</div>
-                        <span>需巩固</span>
-                        <img src="../static/icons/next.png" />
-                        <div class="left-number" style="color:#23B26D">{{wordFinished}}</div>
-                        <span>已完成</span>
-                    </div>
-                    <div class="left-rate">{{progress}}%</div>
-                </div>
-            </div>
-            <div class="learn-word">
-                <div class="word-card" @click="cardClicked(wordEn)">
-                    <div class="card-progress">
-                        <div :style="'width:'+unitProgress+'%'" />
-                    </div>
-                    <div class="word-en"><div/><span>{{wordEn}}</span></div>
-                    <div class="word-zh" :style="showZh?'':'opacity:0'">{{wordZh}}</div>
-                </div>
-                <div class="word-choice">
-                    <template v-if="wordType==='new'">
-                      <div
-                        class="button new"
-                        @click="learnCurrentWord"
-                        :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
-                      >
-                          <div class="button-num"><span>1</span></div>
-                          知道啦，学习下一个
-                      </div>
-                    </template>
-                    <template v-if="wordType==='learned'">
-                        <div
-                          class="button green"
-                          @click="reviseCurrentWord(1)"
-                          :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
-                        >
-                            <div class="button-num"><span>1</span></div>
-                            认识
-                        </div>
-                        <div
-                          class="button yellow"
-                          @click="reviseCurrentWord(2)"
-                          :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
-                        >
-                            <div class="button-num"><span>2</span></div>
-                            模糊
-                        </div>
-                        <div
-                          class="button red"
-                          @click="reviseCurrentWord(3)"
-                          :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
-                        >
-                            <div class="button-num"><span>3</span></div>
-                            不认识
-                        </div>
-                    </template>
-                </div>
-            </div>
+  <div class="learn">
+    <background />
+    <div class="main">
+      <div class="main-left">
+        <div class="left-back" @click="goBack">
+          <img src="../static/icons/back.png" />
+          后退
         </div>
+        <div class="left-main">
+          <div class="left-title">
+            学习模式
+          </div>
+          <div class="left-counter">
+            <div class="left-number" style="color:#AAAAAA">{{wordLeft}}</div>
+            <span>未学习</span>
+            <img src="../static/icons/next.png" />
+            <div class="left-number" style="color:#EACD76">{{wordReview}}</div>
+            <span>待巩固</span>
+            <img src="../static/icons/next.png" />
+            <div class="left-number" style="color:#23B26D">{{wordFinished}}</div>
+            <span>已完成</span>
+          </div>
+          <div class="left-rate">{{progress}}%</div>
+        </div>
+      </div>
+      <div class="learn-word">
+        <div class="word-card" @click="cardClicked(wordEn)">
+          <div class="card-progress">
+            <div :style="'width:'+unitProgress+'%'" />
+          </div>
+          <div class="word-en"><div/><span>{{wordEn}}</span></div>
+          <div class="word-zh" :style="showZh?'':'opacity:0'">{{wordZh}}</div>
+        </div>
+        <div class="word-choice">
+          <template v-if="wordType==='new'">
+            <div
+              class="button new"
+              @click="learnCurrentWord"
+              :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
+            >
+
+              知道啦，学习下一个
+            </div>
+          </template>
+          <template v-if="wordType==='learned'">
+            <div
+              class="button green"
+              @click="reviseCurrentWord(1)"
+              :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
+            >
+              <div class="button-num"><span>1</span></div>
+              认识
+            </div>
+            <div
+              class="button yellow"
+              @click="reviseCurrentWord(2)"
+              :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
+            >
+              <div class="button-num"><span>2</span></div>
+              模糊
+            </div>
+            <div
+              class="button red"
+              @click="reviseCurrentWord(3)"
+              :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
+            >
+              <div class="button-num"><span>3</span></div>
+              不认识
+            </div>
+          </template>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 import word from '@/api/word'
 import index from 'vuex'
+import Background from '@/components/background.vue'
 
 export default {
   name: 'learn',
-  components: {},
+  components: {
+    Background
+  },
   data () {
     return {
       showZh: false,
@@ -219,7 +222,7 @@ export default {
 
 .main-left {
   width: 220px;
-  background: #FFFFFF;
+  background: #fcf5c4;
   position: absolute;
   left: 0;
   top: 80px;
@@ -254,6 +257,7 @@ export default {
   padding-top: 30px;
   display: flex;
   flex-direction: column;
+  color:#FCF4C4;
 }
 
 .left-title {
@@ -263,7 +267,7 @@ export default {
   font-size: 14px;
   letter-spacing: 1.5px;
   font-weight: 600;
-  color: #455358;
+  color: #FCF4C4;
   padding: 0 20px;
   box-sizing: border-box;
 }
@@ -399,6 +403,7 @@ export default {
   justify-content: space-between;
   padding-left: 5px;
   box-sizing: border-box;
+  color:#FCF4C4;
 }
 
 .button {
@@ -413,6 +418,7 @@ export default {
   cursor: pointer;
   position: relative;
   transition: all 0.4s ease;
+  color:#ffffff;
 }
 
 .new {
@@ -450,9 +456,9 @@ export default {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 2px solid #c0cace;
+  border: 2px solid #FCF4C4;
   box-sizing: border-box;
-  color: #c0cace;
+  color: #FCF4C4;
   display: flex;
   align-items: center;
   justify-content: center;

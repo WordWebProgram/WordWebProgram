@@ -1,78 +1,74 @@
 <template>
-    <div class="home">
-        <Login v-if="showLogin" @close="showLogin=false" />
-        <template v-if="user._id">
-            <div class="main">
-                <div class="revise">
-                    <div class="revise-left">
-                        <div class="revise-num">
-                            {{reviseNum}}
-                            <span>待复习</span>
-                        </div>
-                    </div>
-                    <div class="revise-right">
-                        <div class="revise-title">高效背单词</div>
-                        <div class="revise-hint">{{reviseNum?'早晚复习一次，两周完全掌握！':'当前没有待复习单词，快去学习新词吧~'}}</div>
-                        <div v-if="reviseNum" class="revise-button" @click="goRevise">开始复习</div>
-                    </div>
-                </div>
-                <div class="hint">新学单词：</div>
-                <div class="learn">
-                    <div class="learn-list" @click="goLearn('list1')">
-                        <div class="list-title">Day 1：新学List1~3</div>
-                        <div class="list-hint">300个单词</div>
-                        <div class="list-more">{{ getListHint('list1') }}</div>
-                        <div class="list-hover"></div>
-                    </div>
-                    <div class="learn-list" @click="goLearn('list2')">
-                        <div class="list-title">Day 2：新学List4~6</div>
-                        <div class="list-hint">300个单词</div>
-                        <div class="list-more">{{ getListHint('list2') }}</div>
-                        <div class="list-hover"></div>
-                    </div>
-                    <div class="learn-list" @click="goLearn('list3')">
-                        <div class="list-title">Day 3：新学List7~9</div>
-                        <div class="list-hint">300个单词</div>
-                        <div class="list-more">{{ getListHint('list3') }}</div>
-                        <div class="list-hover"></div>
-                    </div>
-                    <div class="learn-list" @click="goLearn('list4')">
-                        <div class="list-title">Day 4：新学List10~12</div>
-                        <div class="list-hint">300个单词</div>
-                        <div class="list-more">{{ getListHint('list4') }}</div>
-                        <div class="list-hover"></div>
-                    </div>
-                    <div class="learn-list" @click="goLearn('list5')">
-                        <div class="list-title">Day 5：新学List13~15</div>
-                        <div class="list-hint">300个单词</div>
-                        <div class="list-more">{{ getListHint('list5') }}</div>
-                        <div class="list-hover"></div>
-                    </div>
-                    <div class="learn-list" @click="goLearn('list6')">
-                        <div class="list-title">Day 6：新学List16~18</div>
-                        <div class="list-hint">220个单词</div>
-                        <div class="list-more">{{ getListHint('list6') }}</div>
-                        <div class="list-hover"></div>
-                    </div>
-                </div>
+  <div class="home">
+    <background />
+    <Login v-if="showLogin" @close="showLogin=false" />
+    <template v-if="user._id">
+      <div class="main">
+        <div class="revise">
+          <div class="revise-left">
+            <div class="revise-num">
+              {{reviseNum}}
+              <span>待复习</span>
             </div>
-        </template>
-        <div v-else class="main">
-            <div class="header">两周搞定GRE单词</div>
-            <img src="../static/icons/logo.svg" />
-            <div class="start" @click="showLogin=true">现在开始</div>
+          </div>
+          <div class="revise-right">
+            <div class="revise-title">成为单词高手！</div>
+            <div v-if="reviseNum" class="revise-button" @click="goRevise">开始复习</div>
+          </div>
         </div>
-
+        <div class="hint">新学单词：</div>
+        <div class="learn">
+          <div class="learn-list" @click="goLearn('list1')">
+            <div class="list-title">Part 1</div>
+            <div class="list-more">{{ getListHint('list1') }}</div>
+            <div class="list-hover"></div>
+          </div>
+          <div class="learn-list" @click="goLearn('list2')">
+            <div class="list-title">Part 2</div>
+            <div class="list-more">{{ getListHint('list2') }}</div>
+            <div class="list-hover"></div>
+          </div>
+          <div class="learn-list" @click="goLearn('list3')">
+            <div class="list-title">Part 3</div>
+            <div class="list-more">{{ getListHint('list3') }}</div>
+            <div class="list-hover"></div>
+          </div>
+          <div class="learn-list" @click="goLearn('list4')">
+            <div class="list-title">Part 4</div>
+            <div class="list-more">{{ getListHint('list4') }}</div>
+            <div class="list-hover"></div>
+          </div>
+          <div class="learn-list" @click="goLearn('list5')">
+            <div class="list-title">Part 5</div>
+            <div class="list-more">{{ getListHint('list5') }}</div>
+            <div class="list-hover"></div>
+          </div>
+          <div class="learn-list" @click="goLearn('list6')">
+            <div class="list-title">Part 6</div>
+            <div class="list-more">{{ getListHint('list6') }}</div>
+            <div class="list-hover"></div>
+          </div>
+        </div>
+      </div>
+    </template>
+    <div v-else class="main">
+      <div class="header">一起成为单词高手！</div>
+      <img src="../static/icons/logo.svg" />
+      <div class="start" @click="showLogin=true">现在开始</div>
     </div>
+
+  </div>
 </template>
 
 <script>
 import Login from '@/components/Login'
 import word from '@/api/word'
+import Background from '@/components/background.vue'
 
 export default {
   name: 'home',
   components: {
+    Background,
     Login
   },
   mounted () {
@@ -153,6 +149,8 @@ export default {
   padding: 35px;
   box-sizing: border-box;
   display: flex;
+  z-index: 1000;
+  position:relative;
 }
 
 .revise-left {
@@ -160,6 +158,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1000;
 }
 
 .revise-num {
@@ -190,6 +189,8 @@ export default {
   height: 100%;
   padding-left: 35px;
   box-sizing: border-box;
+  z-index: 1000;
+  background: #FFFFFF;
 }
 
 .revise-title {
@@ -212,7 +213,7 @@ export default {
   width: 220px;
   height: 64px;
   margin-top: 30px;
-  background: #3CCFCF;
+  background: #BD3124;
   color: #FFFFFF;
   display: flex;
   align-items: center;

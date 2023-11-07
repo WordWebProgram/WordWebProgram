@@ -1,76 +1,79 @@
 <template>
-    <div class="learn">
-        <div class="main">
-            <div class="main-left">
-                <div class="left-back" @click="goBack">
-                    <img src="../static/icons/back.png" />
-                    后退
-                </div>
-                <div class="left-main">
-                    <div class="left-title">
-                        <img src="../static/icons/memory.png" />
-                        复习模式
-                    </div>
-                    <div class="left-counter">
-                        <div class="left-number" style="color:#EACD76">{{wordLeft}}</div>
-                        <span>待复习</span>
-                        <img src="../static/icons/arrow.png" />
-                        <div class="left-number" style="color:#80D1B9">{{wordReview}}</div>
-                        <span>记忆模糊</span>
-                        <img src="../static/icons/arrow.png" />
-                        <div class="left-number" style="color:#23B26D">{{wordFinished}}</div>
-                        <span>当前已记住</span>
-                    </div>
-                    <div class="left-rate"></div>
-                </div>
-            </div>
-            <div class="learn-word">
-                <div class="word-card" @click="cardClicked(wordEn)">
-                    <div class="card-progress">
-                        <div :style="'width:'+unitProgress+'%'" />
-                    </div>
-                    <div class="word-en"><div/><span>{{wordEn}}</span></div>
-                    <div class="word-zh" :style="showZh?'':'opacity:0'">{{wordZh}}</div>
-                </div>
-                <div class="word-choice">
-                    <template v-if="wordType==='learned'">
-                        <div
-                          class="button green"
-                          @click="reviseCurrentWord(1)"
-                          :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
-                        >
-                            <div class="button-num"><span>1</span></div>
-                            认识
-                        </div>
-                        <div
-                          class="button yellow"
-                          @click="reviseCurrentWord(2)"
-                          :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
-                        >
-                            <div class="button-num"><span>2</span></div>
-                            模糊
-                        </div>
-                        <div
-                          class="button red"
-                          @click="reviseCurrentWord(3)"
-                          :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
-                        >
-                            <div class="button-num"><span>3</span></div>
-                            不认识
-                        </div>
-                    </template>
-                </div>
-            </div>
+  <div class="learn">
+    <background />
+    <div class="main">
+      <div class="main-left">
+        <div class="left-back" @click="goBack">
+          <img src="../static/icons/back.png" />
+          后退
         </div>
+        <div class="left-main">
+          <div class="left-title">
+            复习模式
+          </div>
+          <div class="left-counter">
+            <div class="left-number" style="color:#EACD76">{{wordLeft}}</div>
+            <span>未复习</span>
+            <img src="../static/icons/arrow.png" />
+            <div class="left-number" style="color:#80D1B9">{{wordReview}}</div>
+            <span>记忆模糊</span>
+            <img src="../static/icons/arrow.png" />
+            <div class="left-number" style="color:#23B26D">{{wordFinished}}</div>
+            <span>已完成</span>
+          </div>
+          <div class="left-rate"></div>
+        </div>
+      </div>
+      <div class="learn-word">
+        <div class="word-card" @click="cardClicked(wordEn)">
+          <div class="card-progress">
+            <div :style="'width:'+unitProgress+'%'" />
+          </div>
+          <div class="word-en"><div/><span>{{wordEn}}</span></div>
+          <div class="word-zh" :style="showZh?'':'opacity:0'">{{wordZh}}</div>
+        </div>
+        <div class="word-choice">
+          <template v-if="wordType==='learned'">
+            <div
+              class="button green"
+              @click="reviseCurrentWord(1)"
+              :style="showZh?'':'border:solid 2px #c0cace ;color:#c0cace;'"
+            >
+
+              认识
+            </div>
+            <div
+              class="button yellow"
+              @click="reviseCurrentWord(2)"
+              :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
+            >
+
+              模糊
+            </div>
+            <div
+              class="button red"
+              @click="reviseCurrentWord(3)"
+              :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
+            >
+
+              不认识
+            </div>
+          </template>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 import word from '@/api/word'
+import Background from '@/components/background.vue'
 
 export default {
   name: 'revise',
-  components: {},
+  components: {
+    Background
+  },
   data () {
     return {
       showZh: false,
@@ -271,12 +274,12 @@ export default {
 .left-number {
   color: #455358;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 21px;
 }
 
 .left-counter span {
   color: #455358;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
 }
 
@@ -311,7 +314,7 @@ export default {
 .word-card {
   width: 100%;
   height: 75%;
-  background: #FFFFFF;
+  background: #FCF4C4;
   position: relative;
   cursor: pointer;
 }

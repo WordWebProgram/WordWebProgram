@@ -23,7 +23,7 @@
 <script>
 export default {
   name: 'Login',
-  data() {
+  data () {
     return {
       username: '',
       password: '',
@@ -31,17 +31,17 @@ export default {
     }
   },
   methods: {
-    changeType(flag) {
+    changeType (flag) {
       if (flag === 1) {
         this.type = 'login'
       } else {
         this.type = 'register'
       }
     },
-    close() {
+    close () {
       this.$emit('close')
     },
-    login() {
+    login () {
       const username = this.username
       const password = this.password
       if (!username) return alert('请填写用户名')
@@ -59,7 +59,7 @@ export default {
           else console.log(err)
         })
     },
-    register() {
+    register () {
       const username = this.username
       const password = this.password
       if (!username) return alert('请填写用户名')
