@@ -47,25 +47,20 @@
             <div
               class="button green"
               @click="reviseCurrentWord(1)"
-              :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
-            >
-              <div class="button-num"><span>1</span></div>
+              :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'">
+
               认识
             </div>
             <div
               class="button yellow"
               @click="reviseCurrentWord(2)"
-              :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
-            >
-              <div class="button-num"><span>2</span></div>
+              :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'">
               模糊
             </div>
             <div
               class="button red"
               @click="reviseCurrentWord(3)"
-              :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'"
-            >
-              <div class="button-num"><span>3</span></div>
+              :style="showZh?'':'border:solid 2px #c0cace;color:#c0cace;'">
               不认识
             </div>
           </template>
