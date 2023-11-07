@@ -42,10 +42,12 @@ func (handler HttpHandler) Mount() {
 	http.HandleFunc("/login", func(writer http.ResponseWriter, req *http.Request) {
 		params := req.URL.Query()
 		name := params.Get("name")
+		pswd := params.Get("pswd")
 		req.Header.Set("content-type", "application/json")
 		user, err := mongodb.FetchUserInfoByName(handler.db, name)
 		if err != nil {
-			_, err := writer.Write(Failed(1, "user not"))
+			user, err = mongodb.InsertUser(handler.db, name, pswd)
+			_, err := writer.Write(Success(user))
 			if err != nil {
 				fmt.Println("/login http write error", err)
 			}
@@ -83,7 +85,7 @@ func (handler HttpHandler) Mount() {
 			return
 		}
 		fmt.Println("name", name, "pswd", pswd)
-		err = mongodb.InsertUser(handler.db, name, pswd)
+		//err = mongodb.InsertUser(handler.db, name, pswd)
 		if err != nil {
 			if strings.Contains(err.Error(), "Duplicate") {
 				_, err = writer.Write(Failed(1, "用户名重复"))

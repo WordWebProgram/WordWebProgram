@@ -28,7 +28,7 @@ func FetchUserInfoByName(db *mongo.Client, username string) (*User, error) {
 	fmt.Printf("Found a single document: %+v\n", result)
 	return &result, err
 }
-func InsertUser(db *mongo.Client, username string, password string) error {
+func InsertUser(db *mongo.Client, username string, password string) (*User, error) {
 	collection := db.Database("neet-words").Collection("user")
 	result := User{
 		Username: username, Password: password, CreatedAt: time.Now().String(),
@@ -39,5 +39,5 @@ func InsertUser(db *mongo.Client, username string, password string) error {
 	}
 
 	fmt.Println("Inserted a single document: ", insertResult.InsertedID)
-	return err
+	return &result, err
 }
